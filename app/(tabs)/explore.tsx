@@ -7,53 +7,53 @@ import { Ionicons } from '@expo/vector-icons';
 export default function TabTwoScreen() {
   return (
     <ScrollView style={styles.container}>
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={styles.titleContainer} lightColor="transparent" darkColor="transparent">
         <ThemedText type="title" style={{ color: '#333' }}>Acerca de la App</ThemedText>
       </ThemedView>
       <ThemedText style={styles.description}>
         Esta es una aplicación de lista de tareas creada con React Native y Expo. Desarrollada por Francisco Muñoz, un apasionado programador de aplicaciones web y móviles.
       </ThemedText>
-      <ThemedView style={styles.section}>
+      <ThemedView style={styles.section} lightColor="transparent" darkColor="transparent">
         <ThemedText type="subtitle" style={{ color: '#4a90e2' }}>Características</ThemedText>
-        <ThemedView style={styles.list}>
-          <ThemedView style={styles.listItem}>
+        <ThemedView style={styles.list} lightColor="transparent" darkColor="transparent">
+          <ThemedView style={styles.listItem} lightColor="transparent" darkColor="transparent">
             <Ionicons name="checkmark-circle" size={16} color="#4a90e2" />
             <ThemedText style={styles.listText}>Agregar, marcar como completadas y eliminar tareas fácilmente.</ThemedText>
           </ThemedView>
-          <ThemedView style={styles.listItem}>
+          <ThemedView style={styles.listItem} lightColor="transparent" darkColor="transparent">
             <Ionicons name="checkmark-circle" size={16} color="#4a90e2" />
             <ThemedText style={styles.listText}>Persistencia de datos local con AsyncStorage.</ThemedText>
           </ThemedView>
-          <ThemedView style={styles.listItem}>
+          <ThemedView style={styles.listItem} lightColor="transparent" darkColor="transparent">
             <Ionicons name="checkmark-circle" size={16} color="#4a90e2" />
             <ThemedText style={styles.listText}>Interfaz intuitiva y moderna.</ThemedText>
           </ThemedView>
         </ThemedView>
       </ThemedView>
 
-      <ThemedView style={styles.section}>
+      <ThemedView style={styles.section} lightColor="transparent" darkColor="transparent">
         <ThemedText type="subtitle" style={{ color: '#4a90e2' }}>Tecnologías Usadas</ThemedText>
-        <ThemedView style={styles.list}>
-          <ThemedView style={styles.listItem}>
+        <ThemedView style={styles.list} lightColor="transparent" darkColor="transparent">
+          <ThemedView style={styles.listItem} lightColor="transparent" darkColor="transparent">
             <Ionicons name="logo-react" size={16} color="#61dafb" />
             <ThemedText style={styles.listText}>React Native con Expo</ThemedText>
           </ThemedView>
-          <ThemedView style={styles.listItem}>
+          <ThemedView style={styles.listItem} lightColor="transparent" darkColor="transparent">
             <Ionicons name="code-slash" size={16} color="#3178c6" />
             <ThemedText style={styles.listText}>TypeScript para tipado fuerte</ThemedText>
           </ThemedView>
-          <ThemedView style={styles.listItem}>
+          <ThemedView style={styles.listItem} lightColor="transparent" darkColor="transparent">
             <Ionicons name="save" size={16} color="#ff6b35" />
             <ThemedText style={styles.listText}>AsyncStorage para almacenamiento local</ThemedText>
           </ThemedView>
-          <ThemedView style={styles.listItem}>
+          <ThemedView style={styles.listItem} lightColor="transparent" darkColor="transparent">
             <Ionicons name="heart" size={16} color="#e91e63" />
             <ThemedText style={styles.listText}>Ionicons para íconos</ThemedText>
           </ThemedView>
         </ThemedView>
       </ThemedView>
 
-      <ThemedView style={styles.section}>
+      <ThemedView style={styles.section} lightColor="transparent" darkColor="transparent">
         <ThemedText type="subtitle" style={{ color: '#4a90e2' }}>Contacto</ThemedText>
         <ThemedText style={styles.text}>
           ¿Interesado en una app personalizada? Contáctame para discutir tu proyecto.
