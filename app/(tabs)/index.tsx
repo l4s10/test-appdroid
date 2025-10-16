@@ -1,88 +1,127 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
+import { Alert, ScrollView, StyleSheet, TextInput, TouchableOpacity, useColorScheme } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+
+// Para app de lista de tareas
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const colorScheme = useColorScheme();
+  // Estado para la lista de tareas
+  const [tasks, setTasks] = useState<{ id: number; text: string; completed: boolean }[]>([]); // Hooks para tareas
+  // Array de tareas: [{id: 1, text:'Tarea 1, completed: false}]
+  const [newTask, setNewTask] = useState(''); // Texto del input para nueva tarea.
+  // ?? En resumen: tasks = Array vacio (contenedor de tareas), newTask = String para el input
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
+  // useEffect para cargar tareas desde AsyncStorage al iniciar
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const storedTasks = await AsyncStorage.getItem('tasks');
+        if (storedTasks) {
+          setTasks(JSON.parse(storedTasks));
+        }
+      } catch (error) {
+        console.error('Error cargando tareas:', error);
+      }
+    };
+    loadTasks();
+  }, []);
+
+  // useEffect para guardar tareas en AsyncStorage cada vez que cambian
+  useEffect(() => {
+    const saveTasks = async () => {
+      try {
+        await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
+      } catch (error) {
+        console.error('Error guardando tareas:', error);
+      }
+    };
+    saveTasks();
+  }, [tasks]);
+
+  /* ?? Función para agregar tareas.
+    Donde ...tasks, se usa para copiar el array existente y agregar la nueva tarea
+    Date now = agrega un ID unico
+  */
+  const addTask = () => {
+    if (newTask.trim()) {
+      setTasks([...tasks, { id: Date.now(), text: newTask, completed: false }]);
+      setNewTask(''); // Limpia el input
+    }
+  };
+
+  //?? Función para marcar o eliminar tareas
+  const toggleTask = (id: number) => {
+    setTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
+  };
+
+  //?? Para eliminar tareas
+  const deleteTask = (id: number) => {
+    Alert.alert('Eliminar', '¿Estás seguro?', [
+      { text: 'Cancelar' },
+      { text: 'Eliminar', onPress: () => setTasks(tasks.filter(task => task.id !== id)) },
+    ]);
+  };
+
+
+
+
+
+  return (
+    <ScrollView style={styles.container}>
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title" style={{ color: '#333' }}>Lista de Tareas</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+
+      {/* Formulario para tareas */}
+      <ThemedView style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
+        placeholder="Nueva tarea"
+        placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#666'}
+        value={newTask}
+        onChangeText={setNewTask}
+      />
+      <TouchableOpacity style={styles.addButton} onPress={addTask}>
+        <Ionicons name="add" size={20} color="white" />
+        <ThemedText style={{ marginLeft: 8 }}>Agregar</ThemedText>
+      </TouchableOpacity>
+    </ThemedView>
+
+    {/* Para mostrar la lista */}
+    {tasks.map(task => (
+      <ThemedView key={task.id} style={styles.taskContainer}>
+        <TouchableOpacity onPress={() => toggleTask(task.id)} style={styles.taskTextContainer}>
+          <Ionicons name={task.completed ? "checkmark-circle" : "ellipse-outline"} size={24} color={task.completed ? "green" : "#ccc"} />
+          <ThemedText style={[task.completed ? styles.completed : null, { color: '#000' }]}>{task.text}</ThemedText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => deleteTask(task.id)}>
+          <Ionicons name="trash" size={20} color="red" />
+        </TouchableOpacity>
       </ThemedView>
-    </ParallaxScrollView>
+    ))}
+
+
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 16,
+    backgroundColor: '#e6f7ff',
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginBottom: 16,
+    backgroundColor: 'transparent',
   },
   stepContainer: {
     gap: 8,
@@ -95,4 +134,69 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    marginBottom: 16,
+    backgroundColor: 'transparent',
+  },
+  input: {
+    flex: 1,
+    borderWidth: 2,
+    borderColor: '#4a90e2',
+    color: '#333',
+    backgroundColor: '#fff',
+    padding: 12,
+    marginRight: 8,
+    borderRadius: 12,
+    fontSize: 16,
+    shadowColor: '#4a90e2',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  addButton: {
+    backgroundColor: '#4a90e2',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderRadius: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#4a90e2',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  taskContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    marginVertical: 6,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    shadowColor: '#4a90e2',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  taskTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+
+  completed: {
+    textDecorationLine: 'line-through',
+    color: '#999',
+    opacity: 0.7,
+  },
+  delete: {
+    color: 'red',
+  },
+
 });

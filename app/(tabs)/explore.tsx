@@ -1,112 +1,134 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Linking, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabTwoScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
+    <ScrollView style={styles.container}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
+        <ThemedText type="title" style={{ color: '#333' }}>Acerca de la App</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
+      <ThemedText style={styles.description}>
+        Esta es una aplicación de lista de tareas creada con React Native y Expo. Desarrollada por Francisco Muñoz, un apasionado programador de aplicaciones web y móviles.
+      </ThemedText>
+      <ThemedView style={styles.section}>
+        <ThemedText type="subtitle" style={{ color: '#4a90e2' }}>Características</ThemedText>
+        <ThemedView style={styles.list}>
+          <ThemedView style={styles.listItem}>
+            <Ionicons name="checkmark-circle" size={16} color="#4a90e2" />
+            <ThemedText style={styles.listText}>Agregar, marcar como completadas y eliminar tareas fácilmente.</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.listItem}>
+            <Ionicons name="checkmark-circle" size={16} color="#4a90e2" />
+            <ThemedText style={styles.listText}>Persistencia de datos local con AsyncStorage.</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.listItem}>
+            <Ionicons name="checkmark-circle" size={16} color="#4a90e2" />
+            <ThemedText style={styles.listText}>Interfaz intuitiva y moderna.</ThemedText>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+
+      <ThemedView style={styles.section}>
+        <ThemedText type="subtitle" style={{ color: '#4a90e2' }}>Tecnologías Usadas</ThemedText>
+        <ThemedView style={styles.list}>
+          <ThemedView style={styles.listItem}>
+            <Ionicons name="logo-react" size={16} color="#61dafb" />
+            <ThemedText style={styles.listText}>React Native con Expo</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.listItem}>
+            <Ionicons name="code-slash" size={16} color="#3178c6" />
+            <ThemedText style={styles.listText}>TypeScript para tipado fuerte</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.listItem}>
+            <Ionicons name="save" size={16} color="#ff6b35" />
+            <ThemedText style={styles.listText}>AsyncStorage para almacenamiento local</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.listItem}>
+            <Ionicons name="heart" size={16} color="#e91e63" />
+            <ThemedText style={styles.listText}>Ionicons para íconos</ThemedText>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+
+      <ThemedView style={styles.section}>
+        <ThemedText type="subtitle" style={{ color: '#4a90e2' }}>Contacto</ThemedText>
+        <ThemedText style={styles.text}>
+          ¿Interesado en una app personalizada? Contáctame para discutir tu proyecto.
         </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+        <TouchableOpacity style={styles.contactButton} onPress={() => Linking.openURL('mailto:franciscomunoz142@gmail.com')}>
+          <Ionicons name="mail" size={20} color="white" />
+          <ThemedText style={{ color: 'white', marginLeft: 8 }}>Enviar Email</ThemedText>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.contactButton} onPress={() => Linking.openURL('https://www.linkedin.com/in/franciscomv2001dev/')}>
+          <Ionicons name="logo-linkedin" size={20} color="white" />
+          <ThemedText style={{ color: 'white', marginLeft: 8 }}>LinkedIn</ThemedText>
+        </TouchableOpacity>
+      </ThemedView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 16,
+    backgroundColor: '#e6f7ff',
   },
   titleContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
+    marginBottom: 16,
+    backgroundColor: 'transparent',
+  },
+  description: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 20,
+    color: '#333',
+  },
+  section: {
+    marginBottom: 24,
+    backgroundColor: 'Transparent',
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+  },
+  list: {
+    marginTop: 8,
+    backgroundColor: 'Transparent',
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    backgroundColor: 'Transparent',
+  },
+  listText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+    marginLeft: 8,
+    flex: 1,
+  },
+  contactButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4a90e2',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginTop: 8,
+    shadowColor: '#4a90e2',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
 });
